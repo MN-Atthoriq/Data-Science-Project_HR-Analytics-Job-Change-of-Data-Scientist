@@ -11,11 +11,11 @@ To achieve this, Ascencio will build two machine learning models: one to predict
 ## Stage 1 - EDA and Business Insight 
 ### Preprocessing Data Reccomendation
 1. Removing the training_hours column as it is irrelevant both as a target and as a feature. It is not relevant as a target because no feature has a correlation with training_hours. It is also not relevant as a feature since it does not correlate with the target column and it would not make sense for a company to input training_hours data while they are still determining which employees will join the course.
-2. Perform renaming, grouping, and manual imputation first according to the analysis in 1_EDA_Stage-1.ipynb.
+2. Perform renaming and manual imputation first according to the analysis in 1_EDA_Stage-1.ipynb.
 3. When applying one-hot encoding, remove one additional column to avoid multicollinearity issues.
-4. Use an ML model (LGBM Classifier) to impute missing values in the dataset.
+4. Use MICE to impute missing values in the dataset.
 5. Apply SMOTE to handle data imbalance in the target column.
-6. Note that only 10 categorical columns will be used as features:
+6. Note that only 10 columns will be used as features:
 city_development_index, gender, relevent_experience, enrolled_university, education_level, major_discipline, experience, company_size, company_type, last_new_job.
 
 **Notes:**<br/>Since the prediction does not involve the training_hours column, we will only build ML model for predict target column
