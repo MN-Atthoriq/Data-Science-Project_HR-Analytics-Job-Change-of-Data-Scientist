@@ -32,3 +32,8 @@ To achieve this, Ascencio will build two machine learning models: one to predict
 # How to run API in local
 
 After clone repository, use git bash and give the command "python -m uvicorn app.main:app --reload" to run fast api.
+
+# How to run App Dasboard
+
+After clone repository, use git bash and give the command "python -m streamlit run dashboard/dashboard.py
+" to run app.
