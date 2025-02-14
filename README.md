@@ -35,5 +35,5 @@ After clone repository, use git bash and give the command "python -m uvicorn app
 
 # How to run App Dasboard
 
-After clone repository, use git bash and give the command "python -m streamlit run dashboard/dashboard.py
+After clone repository, use git bash and give the command "python -m streamlit run dashboard/app.py
 " to run app.
