@@ -98,7 +98,7 @@ CSS_STYLES = {
     }
     </style>
     <div class="navbar">
-        <a href="#">Ascencio</a>
+        <a href="https://witty-binder-19f.notion.site/155239edc5f18094b4abe4c4ad8c0c02?v=155239edc5f1811388be000c91b0efc3&pvs=4">Ascencio</a>
     </div>
     """,
     "manual": """
