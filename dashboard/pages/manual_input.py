@@ -58,7 +58,7 @@ def show(set_page):
         unsafe_allow_html=True
     )
 
-    st.markdown('<div class="manual-input-container">', unsafe_allow_html=True)
+    # st.markdown('<div class="manual-input-container">', unsafe_allow_html=True)
     st.title("📥 Input Data Karyawan Secara Manual")
     
     feature_inputs = {}
@@ -83,7 +83,7 @@ def show(set_page):
             "company_type_Early Startup", "company_type_Funded Startup", "company_type_NGO", 
             "company_type_Public Sector", "company_type_Pvt Ltd"])
     
-    st.markdown('</div>', unsafe_allow_html=True)
+    # st.markdown('</div>', unsafe_allow_html=True)
     
     if st.button("🔍 Prediksi", key="predict", help="Klik untuk memulai prediksi", use_container_width=True):
         json_payload = {
