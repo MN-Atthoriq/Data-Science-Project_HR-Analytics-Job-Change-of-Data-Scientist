@@ -76,25 +76,26 @@ CSS_STYLES = {
     }
     
     div.stButton > button {
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.75); /* Putih dengan transparansi 50% */
         color: black;
         font-size: 64px;
         font-weight: bold;
-        border-radius: 15px;
+        border-radius: 10px;
         width: 400px;
-        height: 200px;
+        height: 150px;
         box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
      div.stButton > button p{
         color: black;
-        font-size: 48px;
+        font-size: 36px;
         font-weight: bold;
     } 
 
     div.stButton > button:hover {
         transform: scale(1.05);
         box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.3);
+        background-color: rgba(255, 255, 255, 0.9); /* Saat hover, transparansi berkurang menjadi 70% */
     }
     </style>
     <div class="navbar">
