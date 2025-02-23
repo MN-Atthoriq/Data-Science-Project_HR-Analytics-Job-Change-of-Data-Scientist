@@ -60,13 +60,14 @@ def show(set_page):
         st.success("✅ Semua kolom sesuai, siap untuk diproses.")
         st.dataframe(df)  # Tampilkan dataframe yang di-load untuk validasi manual
         
+        # Mengirim semua data mentah ke FastAPI
         if st.button("🚀 Prediksi Semua Data"):
             url = "http://127.0.0.1:8000/predict"
             
             data = [
                 {
                     "fullname": row["Full Name"],
-                    "features": row[expected_columns[1:]].astype(str).tolist()  # Mengirim semua data mentah ke FastAPI
+                    "features": row[expected_columns[1:]].astype(str).tolist()  
                 }
                 for _, row in df.iterrows()
             ]
