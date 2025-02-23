@@ -16,7 +16,7 @@ from openpyxl.worksheet.datavalidation import DataValidation
 app = FastAPI()
 
 # Load model XGBClassifier
-model = joblib.load('app/model/model.pkl')
+model = joblib.load('app/model/lclgbm.pkl')
 
 # Logging untuk debugging
 logging.basicConfig(level=logging.INFO)
