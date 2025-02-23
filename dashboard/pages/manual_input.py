@@ -58,60 +58,57 @@ def show(set_page):
         unsafe_allow_html=True
     )
 
-    # st.markdown('<div class="manual-input-container">', unsafe_allow_html=True)
     st.title("📥 Input Data Karyawan Secara Manual")
     
-    feature_inputs = {}
+    fullname = st.text_input("Full Name")
     
+    feature_inputs = {}
     cols = st.columns(2)
     
     with cols[0]:
-        feature_inputs["city_development_index"] = st.number_input("City Development Index", value=0.0, step=0.01, format="%.3f")
-        feature_inputs["relevant_experience"] = st.selectbox("Relevant Experience", options=[0, 1])
-        feature_inputs["gender"] = st.selectbox("Gender (0: Male, 1: Female)", options=[0, 1])
-        feature_inputs["enrolled_university"] = st.selectbox("Enrolled University", options=[0, 1, 2])
-        feature_inputs["education_level"] = st.selectbox("Education Level", options=[0, 1, 2, 3, 4])
+        feature_inputs["Gender"] = st.selectbox("Gender", options=["Male", "Female", "Other"], index=None, placeholder="Pilih opsi")
+        feature_inputs["Experience"] = st.number_input("Work Experience", value=0, step=1, min_value=0, max_value=21)
+        feature_inputs["Last New Job"] = st.number_input("Duration of Last New Job", value=0, step=1, min_value=0)
+        feature_inputs["Major Discipline"] = st.selectbox("Major Discipline", options=["Arts", "Business Degree", "Humanities", "No Major", "STEM"], index=None, placeholder="Pilih opsi")
+        feature_inputs["Company Size"] = st.selectbox("Company Size", options=[
+            "Less than 10", "10 to 49", "50 to 99", "100 to 499", "500 to 999", "1000 to 4999", "5000 to 9999", "More than 9999"], index=None, placeholder="Pilih opsi")
     
     with cols[1]:
-        feature_inputs["experience"] = st.number_input("Experience", value=0, step=1, min_value=0)
-        feature_inputs["company_size"] = st.number_input("Company Size", value=0, step=1, min_value=0)
-        feature_inputs["last_new_job"] = st.number_input("Last New Job", value=0, step=1, min_value=0)
-        feature_inputs["major_discipline"] = st.selectbox("Major Discipline", options=[
-            "major_discipline_Arts", "major_discipline_Business Degree", "major_discipline_Humanities", 
-            "major_discipline_No Major", "major_discipline_STEM"])
-        feature_inputs["company_type"] = st.selectbox("Company Type", options=[
-            "company_type_Early Startup", "company_type_Funded Startup", "company_type_NGO", 
-            "company_type_Public Sector", "company_type_Pvt Ltd"])
-    
-    # st.markdown('</div>', unsafe_allow_html=True)
+        feature_inputs["Enrolled University"] = st.selectbox("Enrolled University", options=["No Enroll", "Part Time", "Full Time"], index=None, placeholder="Pilih opsi")
+        feature_inputs["Relevant Experience"] = st.selectbox("Data Science Work Experience", options=["No", "Yes"], index=None, placeholder="Pilih opsi")
+        feature_inputs["Education Level"] = st.selectbox("Education Level", options=["Primary School", "High School", "Graduate", "Masters", "Phd"], index=None, placeholder="Pilih opsi")
+        feature_inputs["City Development Index"] = st.number_input("City Development Index", value=0.0, step=0.01, format="%.3f")
+        feature_inputs["Company Type"] = st.selectbox("Company Type", options=["Early Startup", "Funded Startup", "NGO", "Public Sector", "Pvt Ltd"], index=None, placeholder="Pilih opsi")
     
     if st.button("🔍 Prediksi", key="predict", help="Klik untuk memulai prediksi", use_container_width=True):
+        # Validasi agar tidak ada input yang kosong
+        if not fullname or any(v is None or v == "" for v in feature_inputs.values()):
+            st.error("❌ Error: Semua bidang harus diisi sebelum melakukan prediksi.")
+            return
+        
         json_payload = {
+            "fullname": fullname,
             "features": [
-                feature_inputs["city_development_index"],
-                feature_inputs["relevant_experience"],
-                feature_inputs["enrolled_university"],
-                feature_inputs["education_level"],
-                feature_inputs["experience"],
-                feature_inputs["company_size"],
-                feature_inputs["last_new_job"],
-                1 if feature_inputs["gender"] == 1 else 0,
-                0 if feature_inputs["gender"] == 1 else 1,
-            ] + [1 if feature_inputs["major_discipline"] == md else 0 for md in [
-                "major_discipline_Arts", "major_discipline_Business Degree", "major_discipline_Humanities", 
-                "major_discipline_No Major", "major_discipline_STEM"]] + [
-                1 if feature_inputs["company_type"] == ct else 0 for ct in [
-                "company_type_Early Startup", "company_type_Funded Startup", "company_type_NGO", 
-                "company_type_Public Sector", "company_type_Pvt Ltd"]]
+                str(feature_inputs["City Development Index"]),
+                feature_inputs["Relevant Experience"],
+                feature_inputs["Enrolled University"],
+                feature_inputs["Education Level"],
+                str(feature_inputs["Experience"]),
+                feature_inputs["Company Size"],
+                str(feature_inputs["Last New Job"]),
+                feature_inputs["Gender"],
+                feature_inputs["Major Discipline"],
+                feature_inputs["Company Type"]
+            ]
         }
         
         url = "http://127.0.0.1:8000/predict"
-        response = requests.post(url, data=json.dumps([json_payload]))
+        response = requests.post(url, json=[json_payload])
         
         if response.status_code == 200:
             prediction = response.json()["predictions"][0]
-            hasil = "💼 Mencari Pekerjaan Baru" if prediction == 1 else "🏢 Tidak Mencari Pekerjaan Baru"
-            st.success(f"Hasil Prediksi: {hasil}")
+            hasil = "💼 Mencari Pekerjaan Baru" if prediction["prediction"] == 1 else "🏢 Tidak Mencari Pekerjaan Baru"
+            st.success(f"Hasil Prediksi untuk {fullname}: {hasil}")
         else:
             st.error(f"Error: {response.text}")
     
