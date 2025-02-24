@@ -38,9 +38,9 @@ app = FastAPI(
 
 # Load pickle
 try:
-    ordinalencoder = joblib.load('fastapi\pickle\ordinalencoder.pkl')
-    minmaxscaler = joblib.load('fastapi\pickle\minmaxscaler.pkl')
-    model = joblib.load('fastapi\pickle\lclgbm.pkl')
+    ordinalencoder = joblib.load(os.path.join('fastapi', 'pickle', 'ordinalencoder.pkl'))
+    minmaxscaler = joblib.load(os.path.join('fastapi', 'pickle', 'minmaxscaler.pkl'))
+    model = joblib.load(os.path.join('fastapi', 'pickle', 'lclgbm.pkl'))
 except Exception as e:
   raise Exception("Error loading pickle")
 
@@ -136,7 +136,7 @@ class EmployeeData(BaseModel):
   last_new_job: last_new_job_cat
 
   class Config:
-    schema_extra = {
+    json_schema_extra = {
       "example": {
         "full_name": "John Doe",
         "city_development_index": 0.5,
