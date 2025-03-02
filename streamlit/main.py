@@ -6,7 +6,7 @@ import os
 from PIL import Image
 
 # FastAPI Ngrok URL
-API_URL = 'FASTAPI_NGROK_URL' # Replace with your FastAPI Ngrok URL
+API_URL = st.secrets("FASTAPI_NGROK_URL") # Replace with your FastAPI Ngrok URL
 
 # App Config
 st.set_page_config(page_title="Ascencio Course Selection", page_icon="🧩", layout="wide")
