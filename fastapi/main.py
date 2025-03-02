@@ -228,7 +228,7 @@ def header_name(ws,header_list,comment_list,width_list):
 ## Sub-Func: Create Data Validation
 def data_validation(ws,type,formula1,area):
   if type == 'list':
-    dv = DataValidation(type=type, formula1=formula1, allow_blank=True)
+    dv = DataValidation(type=type, formula1=formula1)
     # pop up for instruction
     dv.promptTitle = 'List Selection'
     dv.prompt = 'Please select from the list'
@@ -237,7 +237,7 @@ def data_validation(ws,type,formula1,area):
     dv.error ='Your entry is not in the list'
 
   elif type == 'decimal':
-    dv = DataValidation(type=type, operator='between',formula1=formula1, formula2=1, allow_blank=True)
+    dv = DataValidation(type=type, operator='between',formula1=formula1, formula2=1)
     # pop up for instruction
     dv.promptTitle = 'Decimal Input'
     dv.prompt = 'Please input decimal number in range between 0 to 1'
@@ -246,13 +246,22 @@ def data_validation(ws,type,formula1,area):
     dv.error ='Your entry must decimal number in range between 0 to 1'
 
   elif type == 'whole':
-    dv = DataValidation(type=type, operator='between',formula1=formula1, formula2=21, allow_blank=True)
+    dv = DataValidation(type=type, operator='between',formula1=formula1, formula2=21)
     # pop up for instruction
     dv.promptTitle = 'Whole Number Input'
     dv.prompt = 'Please input whole number in range between 0 to 21'
     # if input not in data validation criteria
     dv.errorTitle = 'Invalid Entry'
     dv.error ='Your entry must be whole number in range between 0 to 21'
+  
+  elif type == 'textLength':
+    dv = DataValidation(type=type, operator='lessThan',formula1=formula1)
+    # pop up for instruction
+    dv.promptTitle = 'Text Input'
+    dv.prompt = 'Please input text with less than 200 characters'
+    # if input not in data validation criteria
+    dv.errorTitle = 'Invalid Entry'
+    dv.error ='Your entry must be text with less than 200 characters'
 
   else:
     print('Invalid type')
@@ -291,7 +300,7 @@ def generate_excel_template():
   header_name(ws,header_list,comment_list,width_list)
   # add data validation to each columns
   # a. fullname
-  # no data validation
+  data_validation(ws,"textLength",200,'A2:A1001')
   # b. gender
   data_validation(ws,"list",'"Male,Female,Other"','B2:B1001')
   # c. enrolled_university
@@ -348,7 +357,7 @@ async def preprocess_data(data: MassInputData):
   """Preprocess employee(s) data for prediction (encoding and scaling)"""
   try:
     # Convert to dataframe
-    df = pd.DataFrame([item.dict() for item in data.employees])
+    df = pd.DataFrame([item.model_dump() for item in data.employees])
     # Store original data
     original_data = df.to_dict('records')
     # Divide columns
