@@ -256,6 +256,40 @@ def preprocess_and_predict(employee_data,mass=False):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+## Ask LLM AI
+def ask_ai(request,df_dict):
+    """
+    Ask AI a question based on employee data
+
+    Parameters
+    ----------
+    request : str
+        The question to ask the AI
+    df_dict : dict
+        A dictionary containing the results dataframe
+
+    Returns
+    -------
+    dict
+        A dictionary containing the AI's response or an error message
+    """
+    try:
+        # API request payload
+        payload = {
+            "question": request,
+            "df_dict": df_dict
+        }
+        ai_response = requests.post(
+            f'{API_URL}/ai_ask', 
+            json=payload
+            )
+        if ai_response.status_code != 200:
+            return {"status": "error", "message": "Failed to ask AI"}
+        return ai_response.json()
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+
 ## Session State Management
 def initialize_session_state():
     """Initialize state variables if they do not exist.
@@ -270,6 +304,8 @@ def initialize_session_state():
         st.session_state.page = 'landing'
     if 'prediction_results' not in st.session_state:
         st.session_state.prediction_results = None
+    if 'dataframe_results' not in st.session_state:
+        st.session_state.dataframe_results = None
 
 ## Navigation
 def navigate_to(page):
@@ -378,7 +414,7 @@ def about_page():
 
     Ascencio, a leading Data Science agency, offers training courses to companies to enhance their employees' skills. Companies want to predict which employees are **unlikely to seek a job change** after completing the course. By focusing on employees who are committed to staying and can contribute sooner, Ascencio helps companies optimize their training investments.
 
-    In this project, companies can input single or multiple employee data to predict which employees are **unlikely or likely to seek a job change** after completing the course. After prediction, companies can consult with AI Chatbot about the result for additional discussion.
+    In this project, companies can input single or multiple employee data to predict which employees are **unlikely or likely to seek a job change** after completing the course. After prediction, companies can consult with AI about the result for additional discussion.
 
     ----
 
@@ -398,7 +434,7 @@ def about_page():
     with col1:
         st.markdown("""
         <p class="main-header-2">
-        Muhammad Naufal At-Thoriq
+        Daniel Renato Marlen
         </p>
         """, unsafe_allow_html=True)
         sub_col1, sub_col2 = st.columns(2)
@@ -420,7 +456,7 @@ def about_page():
     with col3:
         st.markdown("""
         <p class="main-header-2">
-        Muhammad Naufal At-Thoriq
+        Muhammad Hamzah
         </p>
         """, unsafe_allow_html=True)
         sub_col1, sub_col2 = st.columns(2)
@@ -514,7 +550,7 @@ def mass_input_page():
     uploaded, the data is preprocessed and predictions are made. If successful, 
     the user can navigate to the prediction results page.
 
-    The template supports up to 1000 employees per prediction. The function 
+    The template supports up to 50 employees per prediction. The function 
     ensures that all necessary fields are provided and handles errors if the 
     template cannot be retrieved or if prediction processing fails.
 
@@ -531,7 +567,7 @@ def mass_input_page():
         with st.expander("Tutorial How to Use Mass Employee Prediction"):
             st.markdown("""
             1. Download the template
-            2. Fill in the data. Maximum 1000 employees for each predictions
+            2. Fill in the data. Maximum 50 employees for each predictions
             3. Upload the completed template
             """)
         st.markdown('<br>', unsafe_allow_html=True)
@@ -616,11 +652,18 @@ def prediction_results_page():
                             else "More than 9999" if original_data.get("company_size", "N/A") == "10000+"
                             else original_data.get("company_size", "N/A"),
             "Company Type": original_data.get("company_type", "N/A"),
-            "Probability of Leaving": f"{probability:.2%}",
+            "Probability of Leaving": f"{probability:06.2%}",
             "Prediction": "Leave" if prediction == 1 else "Stay"
         }
         results_data.append(result_dict)
     df = pd.DataFrame(results_data)
+
+    # prepare dataset for AI
+    df_results = df.copy()
+    df_results["Probability of Leaving"] = df_results["Probability of Leaving"].str.rstrip("%").astype(float)
+    df_results["Work Experience"] = df_results["Work Experience"].apply(lambda x: 0 if x == '<1' else 21 if x == '>20' else int(x))
+    df_results["Duration of Last New Job"] = df_results["Duration of Last New Job"].apply(lambda x: 0 if x == 'Never' else 5 if x == 'More than 4 years' else int(x))
+    st.session_state.dataframe_results = df_results
 
     st.markdown('<br>', unsafe_allow_html=True)
     
@@ -694,8 +737,25 @@ def prediction_results_page():
             st.dataframe(df, key="results_df_>9", hide_index=True, height=350)
         st.write(f"Total predictions: {len(results)}")  
     
-    st.markdown('<br>', unsafe_allow_html=True)
+    st.markdown("---")
 
+    # Ask AI
+    st.markdown('<h2 class="sub-title">Ask AI</h2>', unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    with col2:
+        request = st.text_area("Ask AI", key="ask_ai", height=100, placeholder="Ask AI about the results", max_chars=500, label_visibility="collapsed")
+        button = st.button('Ask AI', key='ask_ai_button', use_container_width=True)
+    if button and request:
+        with st.spinner("AI is thinking. It may take up to 3 minutes..."):
+            with st.container(border=True):
+                response = ask_ai(request, st.session_state.dataframe_results.to_dict())
+                if response["status"] == "error":
+                    st.write(response['message'])
+                else:
+                    st.write(response["message"])
+                    st.info(response["by"])     
+
+    st.markdown("---")
     # New prediction button
     col1, col2, col3, col4 = st.columns(4)
     with col2:
@@ -704,8 +764,8 @@ def prediction_results_page():
         st.button("New Mass Prediction", on_click=navigate_to, args=('mass_input',), use_container_width=True)
 
     # Placeholder for future chatbot button
-    st.markdown("---")
-    st.info("💬 Coming Soon: AI Assistant to help you understand these predictions!")
+    
+
 
 # Main
 def main():
