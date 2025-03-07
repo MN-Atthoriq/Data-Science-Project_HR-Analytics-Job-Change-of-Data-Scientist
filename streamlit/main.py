@@ -11,6 +11,8 @@ API_URL = st.secrets("FASTAPI_NGROK_URL") # Replace with your FastAPI Ngrok URL
 # App Config
 st.set_page_config(page_title="Ascencio Course Selection", page_icon="🧩", layout="wide")
 img = Image.open("streamlit/bg.png")
+img_renato = Image.open("streamlit/renato.png")
+img_naufal = Image.open("streamlit/naufal.png")
 
 # Custom CSS for better appearance
 st.markdown("""
@@ -422,26 +424,13 @@ def about_page():
     """)
     # Add photo profile
     st.markdown("")
-    col1, col2, col3 = st.columns(3,border=True)
-    with col1:
-        st.image(img, use_container_width=True)
+    col1, col2, col3, col4 = st.columns(4, gap='large')
     with col2:
-        st.image(img, use_container_width=True)
+        st.image(img_naufal, use_container_width=True)
     with col3:
-        st.image(img, use_container_width=True)
+        st.image(img_renato, use_container_width=True)
     # Add name and contact
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.markdown("""
-        <p class="main-header-2">
-        Daniel Renato Marlen
-        </p>
-        """, unsafe_allow_html=True)
-        sub_col1, sub_col2 = st.columns(2)
-        with sub_col1:
-            st.link_button("LinkedIn", "https://www.linkedin.com/in/mnatthoriq/", use_container_width=True)
-        with sub_col2:
-            st.link_button("GitHub", "https://github.com/MN-Atthoriq", use_container_width=True)
+    col1, col2, col3, col4 = st.columns(4, gap='large')
     with col2:
         st.markdown("""
         <p class="main-header-2">
@@ -456,14 +445,14 @@ def about_page():
     with col3:
         st.markdown("""
         <p class="main-header-2">
-        Muhammad Hamzah
+        Daniel Renato Marlen
         </p>
         """, unsafe_allow_html=True)
         sub_col1, sub_col2 = st.columns(2)
         with sub_col1:
-            st.link_button("LinkedIn", "https://www.linkedin.com/in/mnatthoriq/", use_container_width=True)
+            st.link_button("LinkedIn", "https://www.linkedin.com/in/daniel-renato-marlen-389739216", use_container_width=True)
         with sub_col2:
-            st.link_button("GitHub", "https://github.com/MN-Atthoriq", use_container_width=True)
+            st.link_button("GitHub", "https://github.com/platinum21asl", use_container_width=True)
 
 def single_input_page():
     """
