@@ -10,9 +10,9 @@ API_URL = st.secrets["FASTAPI_NGROK_URL"] # Replace with your FastAPI Ngrok URL
 
 # App Config
 st.set_page_config(page_title="Ascencio Course Selection", page_icon="🧩", layout="wide")
-img = Image.open("bg.png")
-img_renato = Image.open("renato.png")
-img_naufal = Image.open("naufal.png")
+img = Image.open("./streamlit/bg.png")
+img_renato = Image.open("./streamlit/renato.png")
+img_naufal = Image.open("./streamlit/naufal.png")
 
 # Custom CSS for better appearance
 st.markdown("""
