@@ -41,9 +41,9 @@ app = FastAPI(
 
 # Load pickle
 try:
-    ordinalencoder = joblib.load(os.path.join('fastapi', 'pickle', 'ordinalencoder.pkl'))
-    minmaxscaler = joblib.load(os.path.join('fastapi', 'pickle', 'minmaxscaler.pkl'))
-    model = joblib.load(os.path.join('fastapi', 'pickle', 'lclgbm.pkl'))
+    ordinalencoder = joblib.load(os.path.join('pickle', 'ordinalencoder.pkl'))
+    minmaxscaler = joblib.load(os.path.join('pickle', 'minmaxscaler.pkl'))
+    model = joblib.load(os.path.join('pickle', 'lclgbm.pkl'))
 except Exception as e:
   raise Exception("Error loading pickle")
 
