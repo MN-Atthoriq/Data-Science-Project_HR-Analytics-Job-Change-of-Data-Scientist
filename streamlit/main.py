@@ -10,9 +10,9 @@ API_URL = st.secrets("FASTAPI_NGROK_URL") # Replace with your FastAPI Ngrok URL
 
 # App Config
 st.set_page_config(page_title="Ascencio Course Selection", page_icon="🧩", layout="wide")
-img = Image.open("streamlit/bg.png")
-img_renato = Image.open("streamlit/renato.png")
-img_naufal = Image.open("streamlit/naufal.png")
+img = Image.open("bg.png")
+img_renato = Image.open("renato.png")
+img_naufal = Image.open("naufal.png")
 
 # Custom CSS for better appearance
 st.markdown("""
@@ -739,7 +739,7 @@ def prediction_results_page():
             with st.container(border=True):
                 response = ask_ai(request, st.session_state.dataframe_results.to_dict())
                 if response["status"] == "error":
-                    st.write(response['message'])
+                    st.write(response['input'].message)
                 else:
                     st.write(response["message"])
                     st.info(response["by"])     
