@@ -41,7 +41,7 @@ city_development_index, gender, relevent_experience, enrolled_university, educat
 8. We pickle 3 objects for our FastAPI as backend in our final project. These objects are ML model, Min Max Scaler, and Label Encoding.
 
 ### Business Recomendation
-1. We suggest Ascencio to search client or company with higher City Development Index (0.8-1 CDI) or have higher Company Size (5000 employees or more). It is because Ascencio can persuade clients more easily since their employee are unlikely leave the company.
+1. We suggest Ascencio to search client or company with lower City Development Index (<0.7 CDI), have lower Company Size (100 employees or more), or NGO Company. This strategy targets company with employee tend to leave, creating higher consulting value through retention solutions.
 2. For choosing participants in data science courses, the company should choose employee that have higher experience working (11 years or above), have higher education level (Phd or Masters), are newer in their current company (1 years or lower), do not currently enrolling in university, and/or relevant experience in data science.
 3. Because we target employees that have higher experience working, Ascencio need to make curriculum of data science with focus that can easily be learned by people aged 30-40 years old.
 4. Employees with STEM major or employees that have relevant experience in data science usually take this data science courses, Ascencio can make curriculum of data science that will more focus on business knowledge than math or programming.
